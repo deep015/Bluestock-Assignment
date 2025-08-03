@@ -3,6 +3,10 @@ const connectDB = require('./db/connect')
 const app = express();
 const cors = require('cors');
 const tasks = require('./routes/tasks');
+
+//const notFound = require('./middleware/not-found');
+const errorHandlerMiddleware = require('./middleware/error-handler');
+
 require('dotenv').config()
     
 
@@ -11,8 +15,8 @@ require('dotenv').config()
 
 app.use(cors()); // Add this before your routes
 app.use(express.json());
-app.use(express.static('./public'));
-
+//app.use(notFound)
+app.use(errorHandlerMiddleware)
 
 // routes
 app.get('/hello', (req, res) => {
@@ -20,7 +24,7 @@ app.get('/hello', (req, res) => {
 });
 
 app.use('/api/v1/tasks', tasks);  // ✅ Correct router usage
-app.get('api/v1/tasks', tasks); // ❌ Incorrect router usage
+app.get('/api/v1/tasks', tasks); // ❌ Incorrect router usage
 const port = 3000;
 
 const start =async ()=>{
